@@ -1,0 +1,55 @@
+plugins {
+    id 'com.android.application'
+    id 'com.chaquo.python' // Плагин, который вшивает Python в APK
+}
+
+android {
+    namespace 'com.monolith.app'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.monolith.app"
+        minSdk 26 // Shizuku требует минимум API 23, но 26 лучше для стабильности
+        targetSdk 34
+        versionCode 1
+        versionName "1.0"
+
+        // Настройка Python
+        python {
+            buildPython "python3" // Использовать локальный python для сборки
+            
+            pip {
+                // Список библиотек, которые будут вшиты в APK
+                install "flask"
+                install "requests"
+            }
+        }
+
+        ndk {
+            // Ограничиваем архитектуры для уменьшения размера APK
+            abiFilters "armeabi-v7a", "arm64-v8a", "x86_64"
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
+
+dependencies {
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.11.0'
+    implementation 'androidx.webkit:webkit:1.9.0' // Для работы WebView
+    
+    // Shizuku API
+    implementation "dev.rikka.shizuku:api:13.1.0"
+    implementation "dev.rikka.shizuku:provider:13.1.0"
+}
