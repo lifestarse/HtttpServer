@@ -110,12 +110,15 @@ if not os.path.exists("/sdcard/.termux_transfer_buffer"):
 PM_TMP = "/data/local/tmp"
 os.makedirs(TMP_DIR, exist_ok=True)
 
-def run_rish(cmd):
-    try:
-        # Убрали timeout=7, теперь команда может работать хоть час
-        return subprocess.check_output(f"rish -c '{cmd}'", shell=True).decode('utf-8', errors='ignore')
-    except Exception as e: 
-        return f"ERROR: {str(e)}"
+from java import jclass
+
+def run_rish(command):
+    # Подключаемся к нашему Java-классу через Chaquopy
+    Bridge = jclass("com.monolith.app.ShizukuBridge")
+    # Выполняем команду
+    result = Bridge.exec(command)
+    return result
+
 
 
 # --- 3. НАСТРОЙКИ ---
