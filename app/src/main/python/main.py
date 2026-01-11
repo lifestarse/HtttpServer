@@ -1456,4 +1456,6 @@ if __name__ == "__main__":
     qr = qrcode.QRCode(box_size=1, border=2)
     qr.add_data(f"http://{ip}:{port}")
     qr.print_ascii()
-    app.run(host='0.0.0.0', port=port, debug=False)
+    def start_server():
+    # host 127.0.0.1 важен для безопасности, чтобы извне никто не зашел
+    app.run(host="127.0.0.1", port=8080, debug=False, use_reloader=False)
